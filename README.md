@@ -39,7 +39,7 @@ provider "azurerm" {
 # Sample module code:
 ```
 module "pfw" {
-  source = "../terraform-palofw-azurerm"
+  source = "github.com/cbts-tools/terraform-palofw-azurerm?ref=v1.0.0"
 
   pfw_rg_name     = "rg-panfw-sec"
   network_rg_name = "rg-panfw-sec"
