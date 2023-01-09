@@ -30,6 +30,7 @@ provider "azurerm" {
 - pfw_vnet_name
 
 ## Optional Variables
+- availability_zones
 - numfws
 - os_sku
 - os_version
@@ -39,7 +40,7 @@ provider "azurerm" {
 # Sample module code:
 ```
 module "pfw" {
-  source = "github.com/cbts-tools/terraform-palofw-azurerm?ref=v1.0.0"
+  source = "github.com/cbts-tools/terraform-palofw-azurerm?ref=v1.1.0"
 
   pfw_rg_name     = "rg-panfw-sec"
   network_rg_name = "rg-panfw-sec"

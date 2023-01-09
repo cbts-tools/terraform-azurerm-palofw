@@ -8,6 +8,12 @@ variable "network_rg_name" {
   type        = string
 }
 
+variable "availability_zones" {
+  description = "List of availability zones for the region of the resource group of the firewalls."
+  type = list(string)
+  default = ["1","2","3"]
+}
+
 variable "files" {
   description = <<-EOF
   Map of all files to copy to bucket. The keys are local paths, the values are remote paths.

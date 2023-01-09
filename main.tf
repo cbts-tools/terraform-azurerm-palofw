@@ -131,7 +131,8 @@ module "pfw_vm" {
   name                = "vm-pfw-${format("%02d", count.index + 1)}"
   username            = "panadmin"
   password            = random_password.adminpass.result
-  avzone              = count.index + 1
+  enable_zones        = var.availability_zones == [""] ? false : true
+  avzone              = var.availability_zones == [""] ? null : element(var.availability_zones, (count.index))
   img_sku             = var.os_sku
   img_version         = var.os_version
   tags                = var.tags
