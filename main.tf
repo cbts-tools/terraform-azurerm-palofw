@@ -37,7 +37,6 @@ resource "random_string" "unique_id" {
 # This module uploads the bootstrap files that are called by the VMs
 module "pfw_bootstrap" {
   source  = "PaloAltoNetworks/vmseries-modules/azurerm//modules/bootstrap"
-  version = "0.5.0"
 
   create_storage_account = true
   storage_account_name   = "stpfw${random_string.unique_id.result}"
@@ -124,7 +123,7 @@ resource "random_password" "adminpass" {
 # This deploys the FW VM(s), connects them to the GWLB and bootstraps them
 module "pfw_vm" {
   source              = "PaloAltoNetworks/vmseries-modules/azurerm//modules/vmseries"
-  version             = "0.5.0"
+  
   count               = var.numfws
   resource_group_name = data.azurerm_resource_group.pfwrg.name
   location            = data.azurerm_resource_group.pfwrg.location
