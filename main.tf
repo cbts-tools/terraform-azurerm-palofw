@@ -45,6 +45,11 @@ module "pfw_bootstrap" {
   location               = data.azurerm_resource_group.pfwrg.location
   tags                   = var.tags
   files                  = var.files
+
+  storage_allow_vnet_subnet_ids = [
+    data.azurerm_subnet.mgmt.id,
+    data.azurerm_subnet.priv.id
+  ]
 }
 
 # Global Load Balance resource with private IP frontend
