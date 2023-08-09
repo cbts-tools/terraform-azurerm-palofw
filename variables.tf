@@ -10,8 +10,8 @@ variable "network_rg_name" {
 
 variable "availability_zones" {
   description = "List of availability zones for the region of the resource group of the firewalls."
-  type = list(string)
-  default = ["1","2","3"]
+  type        = list(string)
+  default     = ["1", "2", "3"]
 }
 
 variable "files" {

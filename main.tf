@@ -36,7 +36,7 @@ resource "random_string" "unique_id" {
 
 # This module uploads the bootstrap files that are called by the VMs
 module "pfw_bootstrap" {
-  source  = "PaloAltoNetworks/vmseries-modules/azurerm//modules/bootstrap"
+  source = "PaloAltoNetworks/vmseries-modules/azurerm//modules/bootstrap"
 
   create_storage_account = true
   name                   = "stpfw${random_string.unique_id.result}"
@@ -68,7 +68,7 @@ resource "azurerm_lb_backend_address_pool" "pfw_pool" {
   loadbalancer_id = azurerm_lb.gwlb.id
   name            = "BackEndAddressPool"
 
-# These are require for chaning to the firewalls
+  # These are require for chaning to the firewalls
   tunnel_interface {
     identifier = 800
     type       = "Internal"
@@ -123,8 +123,8 @@ resource "random_password" "adminpass" {
 
 # This deploys the FW VM(s), connects them to the GWLB and bootstraps them
 module "pfw_vm" {
-  source              = "PaloAltoNetworks/vmseries-modules/azurerm//modules/vmseries"
-  
+  source = "PaloAltoNetworks/vmseries-modules/azurerm//modules/vmseries"
+
   count               = var.numfws
   resource_group_name = data.azurerm_resource_group.pfwrg.name
   location            = data.azurerm_resource_group.pfwrg.location
@@ -138,10 +138,10 @@ module "pfw_vm" {
   tags                = var.tags
 
   interfaces = [{
-    name                 = "nic-pfw-${format("%02d", count.index + 1)}-mgmt"
-    subnet_id            = data.azurerm_subnet.mgmt.id
-    create_public_ip     = false
-    public_ip_address_id = var.use_panorama ? null : azurerm_public_ip.pipfw[count.index].id
+    name             = "nic-pfw-${format("%02d", count.index + 1)}-mgmt"
+    subnet_id        = data.azurerm_subnet.mgmt.id
+    create_public_ip = false
+    public_ip_name   = var.use_panorama ? null : azurerm_public_ip.pipfw[count.index].name
     },
     {
       name                 = "nic-pfw-${format("%02d", count.index + 1)}-data"
