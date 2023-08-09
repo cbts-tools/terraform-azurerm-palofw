@@ -39,7 +39,7 @@ module "pfw_bootstrap" {
   source  = "PaloAltoNetworks/vmseries-modules/azurerm//modules/bootstrap"
 
   create_storage_account = true
-  storage_account_name   = "stpfw${random_string.unique_id.result}"
+  name                   = "stpfw${random_string.unique_id.result}"
   storage_share_name     = "fwbootstrap"
   resource_group_name    = data.azurerm_resource_group.pfwrg.name
   location               = data.azurerm_resource_group.pfwrg.location
