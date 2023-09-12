@@ -45,6 +45,12 @@ variable "os_version" {
   default     = "10.1.4"
 }
 
+variable "custom_vm_size" {
+  description = "Set the customer size for vms. If not set, default is Standard_D3_v2."
+  type        = string
+  default     = "Standard_D3_v2"
+}
+
 variable "use_panorama" {
   description = "Bool to use or not Panorama for management"
   type        = bool

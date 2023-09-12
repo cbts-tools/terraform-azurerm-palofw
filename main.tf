@@ -133,6 +133,7 @@ module "pfw_vm" {
   password            = random_password.adminpass.result
   enable_zones        = var.availability_zones == [""] ? false : true
   avzone              = var.availability_zones == [""] ? null : element(var.availability_zones, (count.index))
+  vm_size             = var.custom_vm_size
   img_sku             = var.os_sku
   img_version         = var.os_version
   tags                = var.tags
