@@ -170,7 +170,7 @@ module "pfw_vm" {
       subnet_id            = data.azurerm_subnet.priv.id
       enable_ip_forwarding = true
       enable_backend_pool  = true
-      lb_backend_pool_id   = module.gwlb.backend_pool_ids[0]
+      lb_backend_pool_id   = module.gwlb.backend_pool_ids["ext-int"]
   }]
 
   bootstrap_options = "storage-account=${module.pfw_bootstrap.storage_account.name};access-key=${module.pfw_bootstrap.storage_account.primary_access_key};file-share=${module.pfw_bootstrap.storage_share.name};share-directory=None"
