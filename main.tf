@@ -69,17 +69,6 @@ module "gwlb" {
   tags = var.tags
 }
 
-# This will create public IPs for the firewalls if local Panorama is not used
-resource "azurerm_public_ip" "pipfw" {
-  count               = var.use_panorama ? 0 : var.numfws
-  name                = "pip-vm-pfw-${format("%02d", count.index + 1)}"
-  resource_group_name = data.azurerm_resource_group.pfwrg.name
-  location            = data.azurerm_resource_group.pfwrg.location
-  sku                 = "Standard"
-  allocation_method   = "Static"
-  tags                = var.tags
-}
-
 # Generate random password
 resource "random_password" "adminpass" {
   length           = 16
