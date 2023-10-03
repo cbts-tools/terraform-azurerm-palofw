@@ -51,7 +51,7 @@ module "pfw_bootstrap" {
 # Gateway Load Balancers
 module "gwlb" {
   for_each = var.gateway_load_balancers
-  source   = "PaloAltoNetworks/vmseries-modules/azurerm/modules/gwlb"
+  source   = "PaloAltoNetworks/vmseries-modules/azurerm//modules/gwlb"
 
   name                = "lbg-pfw"
   resource_group_name = data.azurerm_resource_group.pfwrg.name
