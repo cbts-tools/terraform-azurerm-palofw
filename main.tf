@@ -97,7 +97,6 @@ module "pfw_vm" {
     name             = "nic-pfw-${format("%02d", count.index + 1)}-mgmt"
     subnet_id        = data.azurerm_subnet.mgmt.id
     create_public_ip = true
-    public_ip_name   = var.use_panorama ? null : azurerm_public_ip.pipfw[count.index].name
     },
     {
       name                 = "nic-pfw-${format("%02d", count.index + 1)}-data"
