@@ -36,7 +36,7 @@ resource "random_string" "unique_id" {
 
 # This module uploads the bootstrap files that are called by the VMs
 module "pfw_bootstrap" {
-  source = "PaloAltoNetworks/vmseries-modules/azurerm/modules/bootstrap"
+  source = "PaloAltoNetworks/vmseries-modules/azurerm//modules/bootstrap"
 
   create_storage_account = true
   name                   = "stpfw${random_string.unique_id.result}"
