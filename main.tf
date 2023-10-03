@@ -42,7 +42,7 @@ module "pfw_bootstrap" {
   name                   = "stpfw${random_string.unique_id.result}"
   storage_share_name     = "fwbootstrap"
   resource_group_name    = data.azurerm_resource_group.pfwrg.name
-  location               = data.azurerm_resource_group.pfwrg.location
+  location               = var.pfw_location
   tags                   = var.tags
   files                  = var.files
   storage_acl            = false
@@ -54,7 +54,7 @@ module "gwlb" {
 
   name                = "lbg-pfw"
   resource_group_name = data.azurerm_resource_group.pfwrg.name
-  location            = data.azurerm_resource_group.pfwrg.location
+  location            = var.pfw_location
 
   health_probe = {
     port = 80
@@ -68,61 +68,6 @@ module "gwlb" {
 
   tags = var.tags
 }
-
-### Global Load Balance resource with private IP frontend
-##resource "azurerm_lb" "gwlb" {
-##  name                = "lbg-pfw"
-##  resource_group_name = data.azurerm_resource_group.pfwrg.name
-##  location            = data.azurerm_resource_group.pfwrg.location
-##  sku                 = "Gateway"
-##  tags                = var.tags
-##
-##  frontend_ip_configuration {
-##    name               = "FEIpconfig1"
-##    subnet_id          = data.azurerm_subnet.priv.id
-##    private_ip_address = var.gwlb_priv_ip
-##  }
-##}
-##
-### Load balancer backend ool to add FW VMs to
-##resource "azurerm_lb_backend_address_pool" "pfw_pool" {
-##  loadbalancer_id = azurerm_lb.gwlb.id
-##  name            = "BackEndAddressPool"
-##
-##  # These are require for chaning to the firewalls
-##  tunnel_interface {
-##    identifier = 800
-##    type       = "Internal"
-##    protocol   = "VXLAN"
-##    port       = 2000
-##  }
-##
-##  tunnel_interface {
-##    identifier = 801
-##    type       = "External"
-##    protocol   = "VXLAN"
-##    port       = 2001
-##  }
-##}
-##
-### Default health probe
-##resource "azurerm_lb_probe" "pfw_health" {
-##  loadbalancer_id = azurerm_lb.gwlb.id
-##  name            = "sec_http_health_probe"
-##  port            = 80
-##}
-##
-### Open rule for the chained firewall traffic to pass
-##resource "azurerm_lb_rule" "pfw_all" {
-##  name                           = "LBRule1"
-##  loadbalancer_id                = azurerm_lb.gwlb.id
-##  frontend_ip_configuration_name = "FEIpconfig1"
-##  protocol                       = "All"
-##  frontend_port                  = 0
-##  backend_port                   = 0
-##  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.pfw_pool.id, ]
-##  probe_id                       = azurerm_lb_probe.pfw_health.id
-##}
 
 # This will create public IPs for the firewalls if local Panorama is not used
 resource "azurerm_public_ip" "pipfw" {
@@ -148,7 +93,7 @@ module "pfw_vm" {
 
   count               = var.numfws
   resource_group_name = data.azurerm_resource_group.pfwrg.name
-  location            = data.azurerm_resource_group.pfwrg.location
+  location            = var.pfw_location
   name                = "vm-pfw-${format("%02d", count.index + 1)}"
   username            = "panadmin"
   password            = random_password.adminpass.result
@@ -162,7 +107,7 @@ module "pfw_vm" {
   interfaces = [{
     name             = "nic-pfw-${format("%02d", count.index + 1)}-mgmt"
     subnet_id        = data.azurerm_subnet.mgmt.id
-    create_public_ip = false
+    create_public_ip = true
     public_ip_name   = var.use_panorama ? null : azurerm_public_ip.pipfw[count.index].name
     },
     {

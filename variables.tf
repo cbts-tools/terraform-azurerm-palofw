@@ -3,6 +3,11 @@ variable "pfw_rg_name" {
   type        = string
 }
 
+variable "pfw_location" {
+  description = "Region for the firewall resources."
+  type        = string
+}
+
 variable "network_rg_name" {
   description = "Name of the resource group for network connectivity resources."
   type        = string
