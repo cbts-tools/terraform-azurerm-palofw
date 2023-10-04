@@ -82,6 +82,11 @@ variable "pfw_priv_subnet" {
   type        = string
 }
 
+variable "pfw_ha_subnet" {
+  description = "Name of the ha subnet for the firewall."
+  type        = string
+}
+
 variable "pfw_vnet_name" {
   description = "Name of the vnet for firewall and gwlb subnets."
   type        = string

@@ -27,6 +27,13 @@ data "azurerm_subnet" "priv" {
   resource_group_name  = var.network_rg_name
 }
 
+# Read subnet data to get subnet id
+data "azurerm_subnet" "ha" {
+  name                 = var.pfw_ha_subnet
+  virtual_network_name = var.pfw_vnet_name
+  resource_group_name  = var.network_rg_name
+}
+
 # Random string to ensure storage account has unique name
 resource "random_string" "unique_id" {
   length  = 4
@@ -104,6 +111,10 @@ module "pfw_vm" {
       enable_ip_forwarding = true
       enable_backend_pool  = true
       lb_backend_pool_id   = module.gwlb.backend_pool_ids["ext-int"]
+    },
+    {
+      name                 = "nic-pfw-${format("%02d", count.index + 1)}-ha"
+      subnet_id            = data.azurerm_subnet.ha.id
   }]
 
   bootstrap_options = "storage-account=${module.pfw_bootstrap.storage_account.name};access-key=${module.pfw_bootstrap.storage_account.primary_access_key};file-share=${module.pfw_bootstrap.storage_share.name};share-directory=None"
